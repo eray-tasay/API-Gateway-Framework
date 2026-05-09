@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: APIGateway
+
+server:
+  port: 8081
+
+api-gateway:
+  service-discovery:
+    enabled: true
+    url: http://localhost:8080/service-discovery
+    services-endpoint: /services
+    delta-endpoint: /updates
+  data-source-update:
+    interval: 10s
+  delta:
+    enabled: true
+
+  routes:
+    - id: users
+      uri: http://localhost:8081
+      predicates:
+        - Method=GET
+        - Path=/users
+      filters:
+        - AddRequestHeader=X-Version,v1
+
+    - id: orders
+      uri: http://localhost:8082
+      predicates:
+        - Method=POST
+        - Path=/orders
