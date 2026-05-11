@@ -4,7 +4,7 @@ Specifically, it provides out-of-the-box API gateway, service discovery, and loa
 so that developers can focus just on developing business logic.
 
 ## Links
-Click [here](https://drive.google.com/file/d/1apwx4E9in8yrLD9E_IaQZv4RjdJMY0CR/view) to view my thesis and [here](https://drive.google.com/file/d/1M0_0Gq0afd1j5xqb_rNgLWFB8y6j3dcW/view) to view my English poster.
+Click [here](https://drive.google.com/file/d/1apwx4E9in8yrLD9E_IaQZv4RjdJMY0CR/view) for my thesis and [here](https://drive.google.com/file/d/1M0_0Gq0afd1j5xqb_rNgLWFB8y6j3dcW/view) for English poster.
 
 ## How to Run?
 
