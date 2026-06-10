@@ -1,11 +1,8 @@
 package com.eraytasay.wafflegateway.rpf.filter.factory;
 
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 public final class RequestFilterFactoryRegistry {
     private final Map<String, IRequestFilterFactory> m_factories;
 

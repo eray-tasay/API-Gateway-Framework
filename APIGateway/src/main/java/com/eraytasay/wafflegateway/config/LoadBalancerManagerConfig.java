@@ -4,11 +4,12 @@ import com.eraytasay.wafflegateway.datasource.IServiceDataSource;
 import com.eraytasay.wafflegateway.datasource.NotifyingServiceDataSource;
 import com.eraytasay.wafflegateway.loadbalancer.manager.ListeningServiceLoadBalancerManager;
 import com.eraytasay.wafflegateway.loadbalancer.manager.ServiceLoadBalancerManager;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@AutoConfiguration
 public class LoadBalancerManagerConfig {
     @Bean
     @ConditionalOnProperty(prefix = "api-gateway.service-discovery", name = "enabled", havingValue = "true")
@@ -22,6 +23,7 @@ public class LoadBalancerManagerConfig {
     }
 
     @Bean
+    @ConditionalOnBean(IServiceDataSource.class)
     @ConditionalOnProperty(prefix = "api-gateway.service-discovery", name = "enabled", havingValue = "false")
     public ServiceLoadBalancerManager loadBalancerManager(IServiceDataSource dataSource)
     {

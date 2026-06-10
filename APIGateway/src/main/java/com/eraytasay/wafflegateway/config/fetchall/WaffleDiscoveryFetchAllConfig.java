@@ -3,12 +3,12 @@ package com.eraytasay.wafflegateway.config.fetchall;
 import com.eraytasay.wafflegateway.discovery.waffle.client.WaffleFetchAllServiceDiscoveryClient;
 import com.eraytasay.wafflegateway.discovery.waffle.response.handler.WaffleFetchAllQueryResponseHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "api-gateway.service-discovery", name = "enabled", havingValue = "true")
 public class WaffleDiscoveryFetchAllConfig {
     private final RestClient m_restClient;

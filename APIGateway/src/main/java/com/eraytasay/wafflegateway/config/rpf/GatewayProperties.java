@@ -1,4 +1,4 @@
-package com.eraytasay.wafflegateway.config.prop;
+package com.eraytasay.wafflegateway.config.rpf;
 
 import com.eraytasay.wafflegateway.rpf.route.RouteDefinition;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -6,9 +6,7 @@ import com.eraytasay.wafflegateway.rpf.request.Request;
 import com.eraytasay.wafflegateway.rpf.response.Response;
 import com.eraytasay.wafflegateway.rpf.route.IRoute;
 import com.eraytasay.wafflegateway.rpf.route.RouteResolver;
-import org.springframework.stereotype.Component;
 
-@Component
 public class GatewayHandler {
     private final RouteResolver m_routeResolver;
     private final FilteringHandler m_filteringHandler;

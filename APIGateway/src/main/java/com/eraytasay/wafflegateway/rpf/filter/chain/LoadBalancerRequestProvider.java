@@ -5,22 +5,21 @@ import com.eraytasay.wafflegateway.loadbalancer.manager.IServiceLoadBalancerMana
 import com.eraytasay.wafflegateway.rpf.core.RequestContext;
 import com.eraytasay.wafflegateway.rpf.request.Request;
 import com.eraytasay.wafflegateway.serviceistance.ServiceInstance;
-import org.springframework.stereotype.Component;
 
 import java.net.URI;
 
 /*
 * This class provides the request sent to the resolved service.
 * */
-@Component
-public class RequestProvider {
+public class LoadBalancerRequestProvider implements IRequestProvider {
     private final IServiceLoadBalancerManager m_loadBalancerManager;
 
-    public RequestProvider(IServiceLoadBalancerManager loadBalancerManager)
+    public LoadBalancerRequestProvider(IServiceLoadBalancerManager loadBalancerManager)
     {
         m_loadBalancerManager = loadBalancerManager;
     }
 
+    @Override
     public Request provide(RequestContext context)
     {
         var exchangeRequest = context.getExchangeRequest();

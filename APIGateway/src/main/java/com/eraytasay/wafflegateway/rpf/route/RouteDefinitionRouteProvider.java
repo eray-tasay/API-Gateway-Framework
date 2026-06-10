@@ -1,15 +1,13 @@
 package com.eraytasay.wafflegateway.rpf.route;
 
-import com.eraytasay.wafflegateway.config.prop.GatewayProperties;
+import com.eraytasay.wafflegateway.config.rpf.GatewayProperties;
 import com.eraytasay.wafflegateway.rpf.filter.IRequestFilter;
 import com.eraytasay.wafflegateway.rpf.filter.parser.RequestFilterParser;
 import com.eraytasay.wafflegateway.rpf.predicate.parser.RequestPredicateParser;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public final class RouteDefinitionRouteProvider implements IRouteProvider {
     private final List<RouteDefinition> m_definitions;
     private final RequestPredicateParser m_predicateParser;

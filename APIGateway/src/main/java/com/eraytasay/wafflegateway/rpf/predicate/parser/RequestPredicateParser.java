@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-@Component
 public final class RequestPredicateParser {
     private final RequestPredicateFactoryRegistry m_registry;
 

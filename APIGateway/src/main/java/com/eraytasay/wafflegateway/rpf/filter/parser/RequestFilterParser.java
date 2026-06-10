@@ -2,11 +2,9 @@ package com.eraytasay.wafflegateway.rpf.filter.parser;
 
 import com.eraytasay.wafflegateway.rpf.filter.IRequestFilter;
 import com.eraytasay.wafflegateway.rpf.filter.factory.RequestFilterFactoryRegistry;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-@Component
 public final class RequestFilterParser {
     private final RequestFilterFactoryRegistry m_registry;
 

@@ -4,9 +4,7 @@ import com.eraytasay.wafflegateway.rpf.core.RequestContext;
 import com.eraytasay.wafflegateway.rpf.request.Request;
 import com.eraytasay.wafflegateway.rpf.response.Response;
 import com.eraytasay.wafflegateway.rpf.route.IRoute;
-import org.springframework.stereotype.Component;
 
-@Component
 public class FilteringHandler {
     private final IRequestForwarder m_forwarder;
 

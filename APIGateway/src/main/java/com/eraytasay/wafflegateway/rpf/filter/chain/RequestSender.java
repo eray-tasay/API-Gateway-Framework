@@ -6,14 +6,12 @@ import com.eraytasay.wafflegateway.rpf.response.header.ResponseHeaders;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 import java.util.stream.StreamSupport;
 
-@Component
 public class RequestSender {
     private final RestClient m_restClient;
 

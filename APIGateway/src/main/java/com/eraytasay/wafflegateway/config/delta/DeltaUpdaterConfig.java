@@ -6,11 +6,11 @@ import com.eraytasay.wafflegateway.discovery.waffle.validator.WaffleDeltaUpdateV
 import com.eraytasay.wafflegateway.discovery.waffle.client.WaffleDeltaServiceDiscoveryClient;
 import com.eraytasay.wafflegateway.discovery.waffle.response.WaffleDeltaResponse;
 import com.eraytasay.wafflegateway.discovery.waffle.response.handler.WaffleDeltaQueryResponseHandler;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "api-gateway.delta", name = "enabled", havingValue = "true")
 @ConditionalOnProperty(prefix = "api-gateway.service-discovery", name = "enabled", havingValue = "true")
 public class DeltaUpdaterConfig {

@@ -1,9 +1,7 @@
 package com.eraytasay.wafflegateway.rpf.route;
 
 import com.eraytasay.wafflegateway.rpf.request.Request;
-import org.springframework.stereotype.Component;
 
-@Component
 public class RouteResolver {
     private final IRouteProvider m_routeProvider;
 

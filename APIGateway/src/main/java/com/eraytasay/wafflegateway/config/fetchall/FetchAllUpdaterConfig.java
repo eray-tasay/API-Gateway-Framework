@@ -5,11 +5,11 @@ import com.eraytasay.wafflegateway.datasource.updater.FetchAllServiceDataSourceU
 import com.eraytasay.wafflegateway.discovery.waffle.client.WaffleFetchAllServiceDiscoveryClient;
 import com.eraytasay.wafflegateway.discovery.waffle.response.WaffleFetchAllResponse;
 import com.eraytasay.wafflegateway.discovery.waffle.response.handler.WaffleFetchAllQueryResponseHandler;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "api-gateway.service-discovery", name = "enabled", havingValue = "true")
 public class FetchAllUpdaterConfig {
     private final NotifyingServiceDataSource m_serviceDataSource;
