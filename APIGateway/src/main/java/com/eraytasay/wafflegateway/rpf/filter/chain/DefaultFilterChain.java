@@ -2,7 +2,6 @@ package com.eraytasay.wafflegateway.rpf.filter.chain;
 
 import com.eraytasay.wafflegateway.rpf.core.RequestContext;
 import com.eraytasay.wafflegateway.rpf.filter.IRequestFilter;
-import com.eraytasay.wafflegateway.rpf.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,16 @@ public class DefaultFilterChain implements IFilterChain {
             return;
         }
 
-        Response response = m_forwarder.forward(context);
-        context.setResponse(response);
+        try {
+            var response = m_forwarder.forward(context);
 
-        context.getReleaseCallback().run();
+            context.setResponse(response);
+        }
+        finally {
+            var runnable = context.getReleaseCallback();
+
+            if (runnable != null)
+                runnable.run();
+        }
     }
 }

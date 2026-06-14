@@ -2,10 +2,8 @@ package com.eraytasay.wafflegateway.loadbalancer.manager;
 
 import com.eraytasay.wafflegateway.datasource.IServiceDataSource;
 import com.eraytasay.wafflegateway.exception.AlgorithmMismatchException;
-import com.eraytasay.wafflegateway.loadbalancer.algorithm.IMutableServiceLoadBalancer;
-import com.eraytasay.wafflegateway.loadbalancer.algorithm.IServiceLoadBalancer;
-import com.eraytasay.wafflegateway.loadbalancer.algorithm.MutableLeastConnectionLoadBalancer;
-import com.eraytasay.wafflegateway.loadbalancer.algorithm.MutableRoundRobinLoadBalancer;
+import com.eraytasay.wafflegateway.exception.NoSuchServiceException;
+import com.eraytasay.wafflegateway.loadbalancer.algorithm.*;
 import com.eraytasay.wafflegateway.serviceistance.LoadBalancing;
 import com.eraytasay.wafflegateway.serviceistance.ServiceInstance;
 
@@ -16,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This class is a mutable service load balancer manager implementation.
  */
 public class MutableServiceLoadBalancerManager implements IMutableServiceLoadBalancerManager {
-    private final ConcurrentHashMap<String, IMutableServiceLoadBalancer> m_loadBalancersByServiceName;
+    private volatile ConcurrentHashMap<String, IMutableServiceLoadBalancer> m_loadBalancersByServiceName;
 
     public static MutableServiceLoadBalancerManager of()
     {
@@ -83,9 +81,67 @@ public class MutableServiceLoadBalancerManager implements IMutableServiceLoadBal
     @Override
     public void refresh(IServiceDataSource dataSource)
     {
-        m_loadBalancersByServiceName.clear();
+        m_loadBalancersByServiceName = createNewServiceLoadBalancers(dataSource);
+    }
 
-        init(this, dataSource.getServices());
+    private ConcurrentHashMap<String, IMutableServiceLoadBalancer> createNewServiceLoadBalancers(IServiceDataSource dataSource)
+    {
+        ConcurrentHashMap<String, IMutableServiceLoadBalancer> res = new ConcurrentHashMap<>();
+
+        dataSource.getServices().forEach(si -> {
+            var serviceName = si.getServiceName();
+
+            if (si.getLoadBalancingAlgorithm() == LoadBalancing.LEAST_CONNECTION) {
+                var loadBalancer = res.get(serviceName);
+
+                MutableLeastConnectionLoadBalancer leastConnectionLoadBalancer;
+
+                if (loadBalancer == null) {
+                    leastConnectionLoadBalancer = MutableLeastConnectionLoadBalancer.of();
+                    res.put(serviceName, leastConnectionLoadBalancer);
+                }
+                else {
+                    checkAlgorithm(LoadBalancing.LEAST_CONNECTION, loadBalancer);
+                    leastConnectionLoadBalancer = (MutableLeastConnectionLoadBalancer)loadBalancer;
+                }
+
+                leastConnectionLoadBalancer.addServiceWithLoad(si, getServiceLoad(si));
+            }
+            else {
+                var loadBalancer = res.get(serviceName);
+
+                if (loadBalancer == null) {
+                    loadBalancer = MutableRoundRobinLoadBalancer.of();
+                    res.put(serviceName, loadBalancer);
+                }
+                else
+                    checkAlgorithm(LoadBalancing.ROUND_ROBIN, loadBalancer);
+
+                loadBalancer.addService(si);
+            }
+        });
+
+        return res;
+    }
+
+    private int getServiceLoad(ServiceInstance si)
+    {
+        var balancer = m_loadBalancersByServiceName.get(si.getServiceName());
+
+        if (balancer == null)
+            return 0;
+
+        if (balancer instanceof MutableRoundRobinLoadBalancer)
+            return 0;
+
+        MutableLeastConnectionLoadBalancer leastConnectionLoadBalancer = (MutableLeastConnectionLoadBalancer)balancer;
+
+        try {
+            return leastConnectionLoadBalancer.getLoad(si);
+        }
+        catch (NoSuchServiceException ignore) {
+            return 0;
+        }
     }
 
     private static IMutableServiceLoadBalancer createServiceLoadBalancer(LoadBalancing algorithm)

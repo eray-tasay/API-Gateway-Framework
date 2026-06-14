@@ -32,6 +32,9 @@ public class LoadBalancerRequestProvider implements IRequestProvider {
 
             var serviceInstance = loadBalancer.balance();
 
+            if (serviceInstance == null)
+                throw new NoSuchServiceException("There is no service to which the request is sent: %s".formatted(serviceName));
+
             context.setReleaseCallback(() -> loadBalancer.release(serviceInstance));
 
             request.setScheme("http");
