@@ -60,10 +60,9 @@ public class RequestSender {
 
     private static URI prepareUri(UriBuilder uriBuilder, IRequest request)
     {
-        var host = request.getHeaders().get("Host").getFirst();
-
-        uriBuilder.scheme("http");
-        uriBuilder.host(host);
+        uriBuilder.scheme(request.getScheme());
+        uriBuilder.host(request.getHost());
+        uriBuilder.port(request.getPort());
         uriBuilder.path(request.getPath());
 
         request.getQueryParameters().getNames().forEach(name -> {

@@ -2,11 +2,11 @@ package com.eraytasay.service.discovery.config;
 
 import com.eraytasay.service.discovery.heartbeating.HeartBeatingRequestSender;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-@Configuration
+@AutoConfiguration
 public class HeartBeatingConfig {
     private final RestClient m_restClient;
 

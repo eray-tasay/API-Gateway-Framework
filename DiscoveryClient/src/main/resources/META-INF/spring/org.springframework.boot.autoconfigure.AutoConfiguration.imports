@@ -1,0 +1,6 @@
+com.eraytasay.service.discovery.config.HeartBeatingConfig
+com.eraytasay.service.discovery.config.RegistrationSuccessHandlerConfig
+com.eraytasay.service.discovery.config.RestClientConfig
+com.eraytasay.service.discovery.config.ServiceRegistrarConfig
+com.eraytasay.service.discovery.config.ServiceUnregistrarConfig
+com.eraytasay.service.discovery.config.TaskSchedulerConfig

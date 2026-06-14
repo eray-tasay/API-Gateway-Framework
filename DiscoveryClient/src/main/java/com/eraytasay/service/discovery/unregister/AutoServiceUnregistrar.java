@@ -1,9 +1,7 @@
 package com.eraytasay.service.discovery.unregister;
 
 import jakarta.annotation.PreDestroy;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AutoServiceUnregistrar {
     private final ServiceUnregistrar m_serviceUnregistrar;
 

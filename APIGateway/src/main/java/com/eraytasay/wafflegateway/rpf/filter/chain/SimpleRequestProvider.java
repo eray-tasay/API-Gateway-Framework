@@ -14,6 +14,11 @@ public class SimpleRequestProvider implements IRequestProvider {
         if (uri.getScheme().equals("lb"))
             throw new UnsupportedOperationException("There is no configured load balancer.");
 
+        request.setScheme(uri.getScheme());
+        request.setHost(uri.getHost());
+        request.setPort(uri.getPort());
+        request.setPath(uri.getPath());
+
         return request;
     }
 }

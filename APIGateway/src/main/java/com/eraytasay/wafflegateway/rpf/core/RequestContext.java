@@ -1,6 +1,7 @@
 package com.eraytasay.wafflegateway.rpf.core;
 
-import com.eraytasay.wafflegateway.rpf.request.*;
+import com.eraytasay.wafflegateway.rpf.request.IRequest;
+import com.eraytasay.wafflegateway.rpf.request.Request;
 import com.eraytasay.wafflegateway.rpf.response.Response;
 import com.eraytasay.wafflegateway.rpf.route.IRoute;
 
@@ -8,6 +9,8 @@ public class RequestContext {
     private final IRequest m_incomingRequest;
     private final Request m_exchangeRequest;
     private final IRoute m_route;
+
+    private Runnable m_releaseCallback;
     private Response m_response;
 
     public RequestContext(IRequest incomingRequest, IRoute route)
@@ -40,5 +43,15 @@ public class RequestContext {
     public void setResponse(Response response)
     {
         m_response = response;
+    }
+
+    public Runnable getReleaseCallback()
+    {
+        return m_releaseCallback;
+    }
+
+    public void setReleaseCallback(Runnable releaseCallback)
+    {
+        m_releaseCallback = releaseCallback;
     }
 }

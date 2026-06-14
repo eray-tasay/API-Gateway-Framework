@@ -7,12 +7,29 @@ public final class PathPrefixPredicate implements IRequestPredicate {
 
     public PathPrefixPredicate(String prefix)
     {
-        m_prefix = prefix;
+        m_prefix = normalize(prefix);
     }
 
     @Override
     public boolean test(IRequest request)
     {
-        return request.getPath().startsWith(m_prefix);
+        return matchesPrefix(request.getPath());
+    }
+
+    private String normalize(String prefix)
+    {
+        if (prefix == null || prefix.isEmpty())
+            return "/";
+
+        return prefix.startsWith("/") ? prefix : "/" + prefix;
+    }
+
+    private boolean matchesPrefix(String path)
+    {
+        if (!path.startsWith(m_prefix))
+            return false;
+
+        return path.length() == m_prefix.length()
+                || path.charAt(m_prefix.length()) == '/';
     }
 }

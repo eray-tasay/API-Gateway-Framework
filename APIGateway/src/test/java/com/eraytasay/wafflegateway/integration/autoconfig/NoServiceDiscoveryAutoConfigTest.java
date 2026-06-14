@@ -1,4 +1,4 @@
-package com.eraytasay.wafflegateway;
+package com.eraytasay.wafflegateway.integration.autoconfig;
 
 import com.eraytasay.wafflegateway.datasource.IServiceDataSource;
 import com.eraytasay.wafflegateway.datasource.ServiceDataSource;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NoServiceDiscoveryAutoConfigTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withUserConfiguration(TestConfig.class);
+            .withUserConfiguration(EnableAutoConfig.class);
 
     @Test
     void should_not_create_beans_when_disabled()
@@ -26,6 +26,7 @@ public class NoServiceDiscoveryAutoConfigTest {
         contextRunner
                 .withPropertyValues("api-gateway.service-discovery.enabled=false")
                 .run(context -> {
+                    assertThat(context).hasNotFailed();
                     assertThat(context).doesNotHaveBean(IServiceDataSourceUpdater.class);
                     assertThat(context).doesNotHaveBean(IDeltaServiceDiscoveryClient.class);
                     assertThat(context).doesNotHaveBean(IFetchAllServiceDiscoveryClient.class);
@@ -47,6 +48,7 @@ public class NoServiceDiscoveryAutoConfigTest {
                 .withBean(IServiceDataSource.class, ServiceDataSource::of)
                 .withPropertyValues("api-gateway.service-discovery.enabled=false")
                 .run(context -> {
+                    assertThat(context).hasNotFailed();
                     assertThat(context).hasSingleBean(ServiceLoadBalancerManager.class);
                     assertThat(context).hasSingleBean(LoadBalancerRequestProvider.class);
                 });

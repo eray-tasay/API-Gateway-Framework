@@ -31,5 +31,8 @@ public final class RequestFilterFactoryRegistry {
     {
         register(new AddRequestHeaderFilterFactory());
         register(new AddResponseHeaderFilterFactory());
+        register(new StripPathPrefixFilterFactory());
+        register(new AddPostfixPathFilterFactory());
+        register(new RewritePathFilterFactory());
     }
 }

@@ -26,3 +26,6 @@ com.eraytasay.wafflegateway.config.rpf.RequestPredicateParserConfig
 com.eraytasay.wafflegateway.config.rpf.GatewayPropertiesConfig
 com.eraytasay.wafflegateway.config.rpf.RequestForwarderConfig
 com.eraytasay.wafflegateway.config.rpf.RequestSenderConfig
+com.eraytasay.wafflegateway.config.rpf.RequestMapperConfig
+com.eraytasay.wafflegateway.config.rpf.ResponseWriterConfig
+com.eraytasay.wafflegateway.config.rpf.GatewayRouterConfig

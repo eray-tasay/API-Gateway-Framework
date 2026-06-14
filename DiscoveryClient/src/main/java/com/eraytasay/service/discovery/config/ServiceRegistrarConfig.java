@@ -1,14 +1,15 @@
 package com.eraytasay.service.discovery.config;
 
+import com.eraytasay.service.discovery.register.AutoServiceRegistrar;
 import com.eraytasay.service.discovery.register.ServiceRegistrar;
 import com.eraytasay.service.discovery.register.dto.LoadBalancing;
 import com.eraytasay.service.discovery.register.handler.IRegistrationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-@Configuration
+@AutoConfiguration
 public class ServiceRegistrarConfig {
     private final RestClient m_restClient;
     private final IRegistrationSuccessHandler m_registrationSuccessHandler;
@@ -47,5 +48,11 @@ public class ServiceRegistrarConfig {
                 .servicePort(m_servicePort)
                 .successHandler(m_registrationSuccessHandler)
                 .build();
+    }
+
+    @Bean
+    public AutoServiceRegistrar autoServiceRegistrar()
+    {
+        return new AutoServiceRegistrar(serviceRegistrar());
     }
 }

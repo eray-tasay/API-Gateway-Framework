@@ -4,9 +4,6 @@ import com.eraytasay.wafflegateway.exception.NoSuchServiceException;
 import com.eraytasay.wafflegateway.loadbalancer.manager.IServiceLoadBalancerManager;
 import com.eraytasay.wafflegateway.rpf.core.RequestContext;
 import com.eraytasay.wafflegateway.rpf.request.Request;
-import com.eraytasay.wafflegateway.serviceistance.ServiceInstance;
-
-import java.net.URI;
 
 /*
 * This class provides the request sent to the resolved service.
@@ -35,31 +32,19 @@ public class LoadBalancerRequestProvider implements IRequestProvider {
 
             var serviceInstance = loadBalancer.balance();
 
-            updateHostHeader(request, serviceInstance);
+            context.setReleaseCallback(() -> loadBalancer.release(serviceInstance));
+
+            request.setScheme("http");
+            request.setHost(serviceInstance.getAddress());
+            request.setPort(serviceInstance.getPort());
         }
-        else
-            updateHostHeader(request, uri);
+        else {
+            request.setScheme(uri.getScheme());
+            request.setHost(uri.getHost());
+            request.setPort(uri.getPort());
+            request.setPath(uri.getPath());
+        }
 
         return request;
-    }
-
-    private static void updateHostHeader(Request request, ServiceInstance serviceInstance)
-    {
-        var ip = serviceInstance.getAddress();
-        var port = serviceInstance.getPort();
-
-        // Mutate the request so that it is sent to the resolved service instance.
-        request.getHeaders()
-                .mutate("Host")
-                .clear()
-                .addLast("%s:%d".formatted(ip, port));
-    }
-
-    private static void updateHostHeader(Request request, URI uri)
-    {
-        request.getHeaders()
-                .mutate("Host")
-                .clear()
-                .addLast(uri.getHost());
     }
 }

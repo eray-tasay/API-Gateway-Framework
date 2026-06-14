@@ -31,10 +31,14 @@ public final class RouteDefinitionRouteProvider implements IRouteProvider {
             var matcherBuilder = RequestMatcher.builder();
             definition.getPredicates().forEach(predicateDefinition -> matcherBuilder.predicate(m_predicateParser.parse(predicateDefinition)));
 
-            var filters = new ArrayList<IRequestFilter>();
-            definition.getFilters().forEach(filterDefinition -> filters.add(m_filterParser.parse(filterDefinition)));
+            var routeFilters = new ArrayList<IRequestFilter>();
+            var definitionFilters = definition.getFilters();
 
-            routes.add(new Route(definition.getId(), definition.getUri(), matcherBuilder.build(), filters));
+            // Filters are optional
+            if (definitionFilters != null)
+                definitionFilters.forEach(filterDefinition -> routeFilters.add(m_filterParser.parse(filterDefinition)));
+
+            routes.add(new Route(definition.getId(), definition.getUri(), matcherBuilder.build(), routeFilters));
         }
 
         return routes;

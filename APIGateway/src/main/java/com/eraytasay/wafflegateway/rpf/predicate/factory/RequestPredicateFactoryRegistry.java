@@ -31,6 +31,7 @@ public final class RequestPredicateFactoryRegistry {
     {
         register(new MethodPredicateFactory());
         register(new PathPredicateFactory());
+        register(new PathPrefixPredicateFactory());
         register(new HeaderPredicateFactory());
         register(new HostPredicateFactory());
     }

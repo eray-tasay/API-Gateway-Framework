@@ -5,14 +5,14 @@ import com.eraytasay.service.discovery.register.handler.IRegistrationSuccessHand
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 
 import java.time.Duration;
 import java.time.Instant;
 
-@Configuration
+@AutoConfiguration
 public class RegistrationSuccessHandlerConfig {
     private static final Logger log = LoggerFactory.getLogger(RegistrationSuccessHandlerConfig.class);
 

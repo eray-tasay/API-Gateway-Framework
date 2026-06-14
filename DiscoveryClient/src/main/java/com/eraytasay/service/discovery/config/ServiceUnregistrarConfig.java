@@ -1,12 +1,13 @@
 package com.eraytasay.service.discovery.config;
 
+import com.eraytasay.service.discovery.unregister.AutoServiceUnregistrar;
 import com.eraytasay.service.discovery.unregister.ServiceUnregistrar;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-@Configuration
+@AutoConfiguration
 public class ServiceUnregistrarConfig {
     private final RestClient m_restClient;
 
@@ -38,5 +39,11 @@ public class ServiceUnregistrarConfig {
                 .restClient(m_restClient)
                 .servicePort(m_servicePort)
                 .build();
+    }
+
+    @Bean
+    public AutoServiceUnregistrar autoServiceUnregistrar()
+    {
+        return new AutoServiceUnregistrar(serviceUnregistrar());
     }
 }

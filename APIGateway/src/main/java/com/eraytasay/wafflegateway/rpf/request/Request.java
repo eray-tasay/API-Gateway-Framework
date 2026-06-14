@@ -10,7 +10,10 @@ import java.net.URISyntaxException;
 
 public final class Request implements IRequest {
     private HttpMethod m_method;
+    private String m_host;
     private String m_path;
+    private int m_port;
+    private String m_scheme;
     private RequestHeaders m_headers;
     private QueryParameters m_queryParameters;
     private byte[] m_body;
@@ -23,7 +26,10 @@ public final class Request implements IRequest {
         var object = new Request();
 
         object.setMethod(request.getMethod());
+        object.setHost(request.getHost());
         object.setPath(request.getPath());
+        object.setPort(request.getPort());
+        object.setScheme(request.getScheme());
         object.setHeaders(RequestHeaders.of(request.getHeaders()));
         object.setQueryParameters(QueryParameters.of(request.getQueryParameters()));
         object.setBody(request.getBody().clone());
@@ -87,6 +93,39 @@ public final class Request implements IRequest {
         m_body = body;
     }
 
+    @Override
+    public int getPort()
+    {
+        return m_port;
+    }
+
+    public void setPort(int port)
+    {
+        m_port = port;
+    }
+
+    @Override
+    public String getScheme()
+    {
+        return m_scheme;
+    }
+
+    public void setScheme(String scheme)
+    {
+        m_scheme = scheme;
+    }
+
+    @Override
+    public String getHost()
+    {
+        return m_host;
+    }
+
+    public void setHost(String host)
+    {
+        m_host = host;
+    }
+
     private Request(Builder builder)
     {
         setMethod(builder.m_method);
@@ -94,10 +133,16 @@ public final class Request implements IRequest {
         setHeaders(builder.m_headers);
         setQueryParameters(builder.m_queryParameters);
         setBody(builder.m_body);
+        setHost(builder.m_host);
+        setPort(builder.m_port);
+        setScheme(builder.m_scheme);
     }
 
     public static class Builder {
         private HttpMethod m_method;
+        private String m_host;
+        private int m_port;
+        private String m_scheme;
         private String m_path;
         private RequestHeaders m_headers;
         private QueryParameters m_queryParameters;
@@ -124,6 +169,24 @@ public final class Request implements IRequest {
         public Builder path(String path)
         {
             m_path = path;
+            return this;
+        }
+
+        public Builder scheme(String scheme)
+        {
+            m_scheme = scheme;
+            return this;
+        }
+
+        public Builder host(String host)
+        {
+            m_host = host;
+            return this;
+        }
+
+        public Builder port(int port)
+        {
+            m_port = port;
             return this;
         }
 

@@ -1,5 +1,6 @@
 package com.eraytasay.wafflegateway.datasource;
 
+import com.eraytasay.wafflegateway.exception.NoSuchServiceException;
 import com.eraytasay.wafflegateway.exception.ServiceAlreadyExistsException;
 import com.eraytasay.wafflegateway.serviceistance.ServiceInstance;
 
@@ -59,7 +60,10 @@ public class MutableServiceDataSource implements IMutableServiceDataSource {
     @Override
     public void delete(ServiceInstance serviceInstance)
     {
-        m_servicesById.remove(serviceInstance.getServiceId());
+        var removed = m_servicesById.remove(serviceInstance.getServiceId());
+
+        if (removed == null)
+            throw new NoSuchServiceException("Service with id %s does not exist.".formatted(serviceInstance.getServiceId()));
     }
 
     @Override

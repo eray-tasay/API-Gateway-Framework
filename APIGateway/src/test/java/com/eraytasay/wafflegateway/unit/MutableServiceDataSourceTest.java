@@ -1,29 +1,42 @@
-package com.eraytasay.wafflegateway.datasource;
+package com.eraytasay.wafflegateway.unit;
 
-/*
+import com.eraytasay.wafflegateway.datasource.MutableServiceDataSource;
+import com.eraytasay.wafflegateway.exception.NoSuchServiceException;
+import com.eraytasay.wafflegateway.exception.ServiceAlreadyExistsException;
+import com.eraytasay.wafflegateway.serviceistance.LoadBalancing;
+import com.eraytasay.wafflegateway.serviceistance.ServiceInstance;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class MutableServiceDataSourceTest {
     private MutableServiceDataSource m_serviceDataSource;
 
     @BeforeEach
     void setUp()
     {
-        m_serviceDataSource = new MutableServiceDataSource();
+        m_serviceDataSource = MutableServiceDataSource.of();
     }
 
     @Test
-    void save_shouldAddNewServiceInstance()
+    void add_shouldAddNewServiceInstance()
     {
         var instance = new ServiceInstance("test-service", "1.1.1.1", 80, LoadBalancing.ROUND_ROBIN);
 
         m_serviceDataSource.add(instance);
 
-        var siOpt = m_serviceDataSource.getService("test-service", "1.1.1.1:80" );
+        var siOpt = m_serviceDataSource.getService(instance.getServiceId());
 
         assertFalse(siOpt.isEmpty());
     }
 
     @Test
-    void save_shouldAddNewServiceInstancesWithSameName()
+    void add_shouldAddNewServiceInstancesWithSameName()
     {
         var instance1 = new ServiceInstance("test-service", "1.1.1.1", 80, LoadBalancing.ROUND_ROBIN);
         var instance2 = new ServiceInstance("test-service", "1.1.1.1", 85, LoadBalancing.ROUND_ROBIN);
@@ -35,11 +48,11 @@ public class MutableServiceDataSourceTest {
             m_serviceDataSource.add(instance3);
         });
 
-        assertEquals(3, m_serviceDataSource.getServices("test-service").size());
+        assertEquals(3, toList(m_serviceDataSource.getServices()).size());
     }
 
     @Test
-    void save_shouldThrowException_whenServiceAlreadyExists()
+    void add_shouldThrowException_whenServiceAlreadyExists()
     {
         var instance1 = new ServiceInstance("test-service", "1.1.1.1", 80, LoadBalancing.ROUND_ROBIN);
         var instance2 = new ServiceInstance("test-service", "1.1.1.1", 80, LoadBalancing.ROUND_ROBIN);
@@ -50,40 +63,28 @@ public class MutableServiceDataSourceTest {
     }
 
     @Test
-    void remove_shouldRemoveServiceInstance()
+    void delete_shouldDeleteServiceInstance()
     {
         var instance1 = new ServiceInstance("payment-service", "127.0.0.1", 8080, LoadBalancing.ROUND_ROBIN);
 
         m_serviceDataSource.add(instance1);
 
-        assertDoesNotThrow(() -> m_serviceDataSource.remove(instance1));
+        assertDoesNotThrow(() -> m_serviceDataSource.delete(instance1));
 
-        var siOpt = m_serviceDataSource.getService("payment-service", "127.0.0.1:8080");
+        var siOpt = m_serviceDataSource.getService(instance1.getServiceId());
 
         assertTrue(siOpt.isEmpty());
     }
 
     @Test
-    void remove_shouldThrowExceptionWhenServiceNameDoesNotExist()
-    {
-        var ex = assertThrows(NoSuchServiceException.class, () ->
-                m_serviceDataSource.remove(new ServiceInstance("unknown-service", "1.1.1.1", 80, LoadBalancing.ROUND_ROBIN)));
-
-        assertEquals(
-                "Service with name unknown-service does not exist.",
-                ex.getMessage()
-        );
-    }
-
-    @Test
-    void remove_ShouldThrowExceptionWhenServiceIdNotExist()
+    void delete_ShouldThrowExceptionWhenServiceIdNotExist()
     {
         var instance = new ServiceInstance("payment-service", "127.0.0.1", 8080, LoadBalancing.ROUND_ROBIN);
 
         m_serviceDataSource.add(instance);
 
         var ex = assertThrows(NoSuchServiceException.class, () ->
-                        m_serviceDataSource.remove(new ServiceInstance("payment-service", "127.1.1.1", 8080, LoadBalancing.ROUND_ROBIN)));
+                        m_serviceDataSource.delete(new ServiceInstance("payment-service", "127.1.1.1", 8080, LoadBalancing.ROUND_ROBIN)));
 
         assertEquals(
                 "Service with id 127.1.1.1:8080 does not exist.",
@@ -91,15 +92,8 @@ public class MutableServiceDataSourceTest {
         );
     }
 
-    @Test
-    void delete_shouldRemoveServiceListWhenLastInstanceDeleted()
+    private static <T> List<T> toList(Iterable<T> iterable)
     {
-        var instance = new ServiceInstance("payment-service", "127.0.0.1", 8080, LoadBalancing.ROUND_ROBIN);
-
-        m_serviceDataSource.add(instance);
-        m_serviceDataSource.remove(instance);
-
-        assertEquals(0, m_serviceDataSource.getServices("payment-service").size());
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
     }
 }
-*/

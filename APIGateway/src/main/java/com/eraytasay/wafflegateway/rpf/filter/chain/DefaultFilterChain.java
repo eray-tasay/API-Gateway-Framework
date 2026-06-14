@@ -30,5 +30,7 @@ public class DefaultFilterChain implements IFilterChain {
 
         Response response = m_forwarder.forward(context);
         context.setResponse(response);
+
+        context.getReleaseCallback().run();
     }
 }
