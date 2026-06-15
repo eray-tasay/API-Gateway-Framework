@@ -6,10 +6,12 @@ import com.eraytasay.service.discovery.register.dto.LoadBalancing;
 import com.eraytasay.service.discovery.register.handler.IRegistrationSuccessHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClient;
 
 @AutoConfiguration
+@ConditionalOnProperty(prefix = "auto-register", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ServiceRegistrarConfig {
     private final RestClient m_restClient;
     private final IRegistrationSuccessHandler m_registrationSuccessHandler;

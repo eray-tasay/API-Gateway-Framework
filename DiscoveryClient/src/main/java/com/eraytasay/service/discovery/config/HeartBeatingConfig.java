@@ -3,10 +3,12 @@ package com.eraytasay.service.discovery.config;
 import com.eraytasay.service.discovery.heartbeating.HeartBeatingRequestSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClient;
 
 @AutoConfiguration
+@ConditionalOnProperty(prefix = "heart-beating", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class HeartBeatingConfig {
     private final RestClient m_restClient;
 
